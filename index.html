@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        font-family: sans-serif;
+        line-height: 1.3;
+      }
+
+      header {
+        display: sticky;
+        margin: 0;
+        padding: 1em;
+      }
+
+      main {
+        width: calc(min(40em, 100% - 2em));
+        margin: auto;
+      }
+
+      .wide-mode main {
+        width: calc(100% - 2em);
+      }
+
+      button {
+        border: none;
+        border-radius: 3px;
+        background-color: #cccccc;
+        padding: 0.3em;
+      }
+
+      .wide-mode .wide-mode-button {
+        outline: 3px solid orange;
+      }
+
+      .bold {
+        font-weight: bold;
+      }
+
+      .procedures-box {
+        display: flex;
+        max-height: 3em;
+        justify-content: stretch;
+      }
+
+      .procedure {
+        border: 1px solid black;
+        border-radius: 1em;
+        aspect-ratio: 1;
+        margin: 0.1em;
+        padding: 0 0.4em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .data {
+        border: 1px solid black;
+        border-radius: 1em;
+        padding: 0 0.7em;
+        margin: 0.1em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .good-data {
+        background-color: #a1eaa1;
+      }
+
+      .bad-data {
+        background-color: #eaa1a1;
+      }
+
+      .good-or-bad-data {
+        background: linear-gradient(45deg, #a1eaa1 50%, #eaa1a1 51%);
+      }
+
+      .symbol {
+        display: flex;
+        align-items: center;
+        font-size: 2em;
+      }
+
+      .horizontal {
+        display: flex;
+        justify-content: stretch;
+      }
+
+      .horizontal > * {
+        flex-grow: 1;
+        padding: 1em;
+      }
+
+      .horizontal h3 {
+        text-align: center;
+      }
+
+      .highlighted-procedure {
+        background-color: #ffd900;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <button
+        class="wide-mode-button"
+        onclick="document.querySelector('body').classList.toggle('wide-mode')"
+      >
+        Toggle Wide Mode
+      </button>
+    </header>
+    <main>
+      <h1>Debugging</h1>
+      <h2>Expectations vs Reality</h2>
+      <p>
+        One of the most common misconceptions about debugging is that it is
+        about your code not working. This could not be further from the truth.
+        Your code, in a sense, almost always <em>works</em>. In other words,
+        <em>it does exactly what you tell it to do.</em> The real problem, then,
+        is that <em class="bold">you gave it the wrong instructions.</em>
+      </p>
+      <p>
+        What this means is that somewhere along the line, the output you
+        <em>expected</em> your code to produce diverged from what it
+        <em>actually</em> produced in reality. <em>This</em> is the problem at
+        the heart of debugging:
+        <em class="bold">a mismatch between expectations and reality.</em>
+      </p>
+      <h2>The Point of First Divergence</h2>
+      <p>
+        Say you have a program that operates on some data. You have ten
+        different procedures, all of which modify some data before taking that
+        data to the next procedure. We'll number them P1 through P10. They're
+        represented below:
+      </p>
+      <div class="procedures-box">
+        <div class="procedure">P1</div>
+        <div class="procedure">P2</div>
+        <div class="procedure">P3</div>
+        <div class="procedure">P4</div>
+        <div class="procedure">P5</div>
+        <div class="procedure">P6</div>
+        <div class="procedure">P7</div>
+        <div class="procedure">P8</div>
+        <div class="procedure">P9</div>
+        <div class="procedure">P10</div>
+      </div>
+      <p>Say we pass some data into P1, data which we know is expected</p>
+      <div class="procedures-box">
+        <div class="data good-data">Expected Data</div>
+        <div class="symbol">&rArr;</div>
+        <div class="procedure">P1</div>
+        <div class="procedure">P2</div>
+        <div class="procedure">P3</div>
+        <div class="procedure">P4</div>
+        <div class="procedure">P5</div>
+        <div class="procedure">P6</div>
+        <div class="procedure">P7</div>
+        <div class="procedure">P8</div>
+        <div class="procedure">P9</div>
+        <div class="procedure">P10</div>
+      </div>
+      <p>
+        We run the program, and we get some data out of it... but that output
+        data is not what we want! It's
+        <em>a mismatch between expectations and reality</em>.
+      </p>
+      <div class="procedures-box">
+        <div class="data good-data">Expected Data</div>
+        <div class="symbol">&rArr;</div>
+        <div class="procedure">P1</div>
+        <div class="procedure">P2</div>
+        <div class="procedure">P3</div>
+        <div class="procedure">P4</div>
+        <div class="procedure">P5</div>
+        <div class="procedure">P6</div>
+        <div class="procedure">P7</div>
+        <div class="procedure">P8</div>
+        <div class="procedure">P9</div>
+        <div class="procedure">P10</div>
+        <div class="symbol">&rArr;</div>
+        <div class="data bad-data">Unexpected Data</div>
+      </div>
+      <p>
+        Somewhere along the line, somewhere amongst these ten procedures, there
+        was a mismatch in expectations in our code. This mismatch in
+        expectations led to the offending procedure modifying our data in the
+        wrong way. In other words, there was some procedure that
+        <em>took in expected data</em> and <em>put out unexpected data</em>.
+      </p>
+      <div class="horizontal">
+        <div>
+          <h3>Good</h3>
+          <p>
+            A good procedure will take in Expected Data and put out Expected
+            Data.
+          </p>
+          <div class="procedures-box">
+            <div class="data good-data">Expected Data</div>
+            <div class="symbol">&rArr;</div>
+            <div class="procedure">P</div>
+            <div class="symbol">&rArr;</div>
+            <div class="data good-data">Expected Data</div>
+          </div>
+        </div>
+        <div>
+          <h3>Bad</h3>
+          <p>
+            A bad procedure will take in Expected Data and put out Unexpected
+            Data.
+          </p>
+          <div class="procedures-box">
+            <div class="data good-data">Expected Data</div>
+            <div class="symbol">&rArr;</div>
+            <div class="procedure">P</div>
+            <div class="symbol">&rArr;</div>
+            <div class="data bad-data">Unexpected Data</div>
+          </div>
+        </div>
+      </div>
+      <p>
+        This only accounts for two of the possible four cases. We actually can't
+        say much about a procedure that <em>takes in unexpected data</em>. After
+        all, <em>garbage in, garbage out.</em> We should never rely on our
+        ability to deduce correct conclusions from incorrect data.
+      </p>
+      <div class="horizontal">
+        <div>
+          <h3>Unsure if Broken</h3>
+          <div class="procedures-box">
+            <div class="data bad-data">Unexpected Data</div>
+            <div class="symbol">&rArr;</div>
+            <div class="procedure">P</div>
+            <div class="symbol">&rArr;</div>
+            <div class="data good-or-bad-data">Either Data</div>
+          </div>
+        </div>
+      </div>
+      <p>
+        What this means is that as soon as our data becomes unexpected, we can
+        no longer debug a procedure further down the "chain." For instance, if
+        P5 is broken, then we can't be sure whether P6 works, because P6 will be
+        taking in unexpected data from P5. And if we can't be sure that P6
+        works, we can't be sure if P7 works. And if we can't be sure that P7
+        works, we can't be sure if P8 works. And so on and so forth.
+      </p>
+      <p>
+        What <em>this</em> means is that we should aim to find and debug the
+        <em>first</em> procedure along the chain to exhibit unexpected behavior,
+        because this is the <em>only</em> one we can truly <em>verify</em> to be
+        broken. This first broken procedure is what I like to call
+        <em class="bold">The Point of First Divergence</em>.
+      </p>
+      <h3>Finding The Point of First Divergence</h3>
+      <p>
+        This begs the question: How do we <em>find</em> this procedure? Checking
+        all ten procedures for bugs would be rather slow. Is there a faster way?
+      </p>
+      <p>
+        We can start by asking a question: Is the point of first divergence
+        between P1 and P5, or is it between P6 and P10? It turns out that to
+        solve this question, we only need to make a single, very simple change:
+      </p>
+      <div class="procedures-box">
+        <div class="data good-data">Expected Data</div>
+        <div class="symbol">&rArr;</div>
+        <div class="procedure">P1</div>
+        <div class="procedure">P2</div>
+        <div class="procedure">P3</div>
+        <div class="procedure">P4</div>
+        <div class="procedure">P5</div>
+        <div class="procedure highlighted-procedure">Logger</div>
+        <div class="procedure">P6</div>
+        <div class="procedure">P7</div>
+        <div class="procedure">P8</div>
+        <div class="procedure">P9</div>
+        <div class="procedure">P10</div>
+        <div class="symbol">&rArr;</div>
+        <div class="data bad-data">Unexpected Data</div>
+      </div>
+      <p>
+        What we've added is a "logger" procedure between P5 and P6. All this
+        procedure will do is tell us what the data will look like
+        <em>after being modified by P5</em> but
+        <em>before being modified by P6</em>.
+      </p>
+      <p>
+        Say that the logger outputs unexpected data. This means that, by the
+        time it exited P5, something went wrong. P5 could be producing
+        unexpected data. However, P4 could also have been producing unexpected
+        data that <em>stayed bad</em> as it passed through P5. Likewise for P3,
+        P2, and P1.
+      </p>
+      <p>
+        On the other hand, if the logger outputs expected data, since we
+        <em>know</em> that it will be unexpected by the <em>end</em> of the
+        program, it must have become unexpected somewhere <em>later on</em> into
+        the program&mdash; i.e. somewhere between P6 and P10. While this does
+        not eliminate the possibility of an <em>earlier</em> error, it
+        guarantees the possibilty of a <em>later</em> error.
+      </p>
+      <p>
+        In summary, if the logger outputs unexpected data, an error occurred
+        between P1 and P5. If the logger outputs expected data, an error
+        occurred between P6 and P10.
+      </p>
+      <p>
+        Speaking more generally, if the logger outputs unexpected data, the
+        error happened <em>before</em> the logger. If the logger outputs
+        expected data, the error happened <em>after</em> the logger. With a
+        single addition to our program, we've cut our search space in
+        <em>half</em>.
+      </p>
+      <h3>Repeating this process again</h3>
+      <p>
+        For the sake of example, let's say the logger outputted unexpected data.
+        Therefore, P1 through P5 could be the source of the error:
+      </p>
+      <div class="procedures-box">
+        <div class="data good-data">Expected Data</div>
+        <div class="symbol">&rArr;</div>
+        <div class="procedure highlighted-procedure">P1</div>
+        <div class="procedure highlighted-procedure">P2</div>
+        <div class="procedure highlighted-procedure">P3</div>
+        <div class="procedure highlighted-procedure">P4</div>
+        <div class="procedure highlighted-procedure">P5</div>
+        <div class="procedure">P6</div>
+        <div class="procedure">P7</div>
+        <div class="procedure">P8</div>
+        <div class="procedure">P9</div>
+        <div class="procedure">P10</div>
+        <div class="symbol">&rArr;</div>
+        <div class="data bad-data">Unexpected Data</div>
+      </div>
+      <p>
+        Now that we know this, we can apply the same process again and add a
+        logger between, say, P3 and P4.
+      </p>
+      <div class="procedures-box">
+        <div class="data good-data">Expected Data</div>
+        <div class="symbol">&rArr;</div>
+        <div class="procedure">P1</div>
+        <div class="procedure">P2</div>
+        <div class="procedure">P3</div>
+        <div class="procedure highlighted-procedure">Logger</div>
+        <div class="procedure">P4</div>
+        <div class="procedure">P5</div>
+        <div class="procedure">P6</div>
+        <div class="procedure">P7</div>
+        <div class="procedure">P8</div>
+        <div class="procedure">P9</div>
+        <div class="procedure">P10</div>
+        <div class="symbol">&rArr;</div>
+        <div class="data bad-data">Unexpected Data</div>
+      </div>
+      <p>
+        The same logic from the last section still applies. If the logger
+        outputs unexpected data, then P1, P2, or P3 could be broken. If the
+        logger outputs expected data, then P4 or P5 could be broken.
+      </p>
+      <p>
+        We can keep on repeating this process, subdividing the chain of
+        procedures in two until we finally show that
+        <em>one specific procedure</em> is responsible for the bug. This is a
+        process known as <em>binary search</em>. Using it, rather than having to
+        test all ten procedures separately, we only need to test
+        <em>at most four</em>.
+      </p>
+      <p>
+        While this seems like a fairly mediocre improvement, the benefits of
+        binary search become more apparent when we increase the number of
+        procedures. With 100 procedures, we only need at most 7 steps of binary
+        search. With 1000, we only need at most 10.
+      </p>
+    </main>
+  </body>
+</html>
